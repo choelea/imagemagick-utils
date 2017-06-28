@@ -1,0 +1,13 @@
+<div class="container">
+    <h3>Image List</h3>
+    <div class="panel">
+        <a class="btn btn-sm btn-primary"  >Download Zip</a>        
+    </div>
+    <div class="panel">
+        <ul class="list-group" id="fileList">
+            {{#each images}}
+            <li class="list-group-item"><img src="{{this}}" /></li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

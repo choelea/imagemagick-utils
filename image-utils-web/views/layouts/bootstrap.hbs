@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    {{#each myCSSs}}
+        <link rel="stylesheet" href="/public/css/{{this}}">
+    {{/each}}
+
+</head>
+
+<body>
+
+
+    <section id="content-body">
+        {{{body}}}
+    </section>
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {{#each myJSs}}
+        <script src="/public/js/{{this}}"></script>
+    {{/each}}
+</body>
+
+</html>
