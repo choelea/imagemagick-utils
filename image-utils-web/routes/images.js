@@ -9,7 +9,6 @@ var upload = multer({ dest: 'uploads/tmp', limits: { fields: 10, fileSize: '20MB
 router.get('/', (req, res) => {
     res.render('images/uploader', {
         title: 'Compress Images',
-        layout: 'bootstrap',
         myCSSs: ['images.css'],
         myJSs: ['images-uploader.js']
     });
@@ -22,12 +21,10 @@ router.get('/zip/:uuid', (req, res) => {
     var returnJson = {};
     zipFolder(dir, 'uploads/' + uuid + ".zip", function (err) {
         if (err) {
-            console.log('oh no!', err);
-        } else {
-            console.log('EXCELLENT');
-        }
+           throw err
+        } 
     });
-    res.json({ 'success': true });
+    res.json({ 'success': true,'url':'/uploads/'+uuid+".zip" });
 });
 
 router.get('/:uuid', (req, res) => {
@@ -45,12 +42,12 @@ router.get('/:uuid', (req, res) => {
     });
     res.render('images/compressed-result', {
         title: 'Compressed Images',
-        layout: 'bootstrap',
+        uuid: uuid,
         images: images
     });
 });
 
-
+/** upload images: 1, upload to uploads/tmp */
 router.post('/upload', upload.array('images'), function (req, res, next) {
     let uuid = uuidv1();
     let targetFolder = 'uploads/' + uuid;

@@ -20,13 +20,13 @@
         //         console.log(data);
         //     }
         // );
-        $.ajax('images/upload', {
+        $.ajax('/images/upload', {
             method: 'POST',
             contentType: false,
             processData: false,
             data: formData,
             success: function(data,ts){
-                window.location.href='images/'+data.relativePath;
+                window.location.href='/images/'+data.relativePath;
             },
             error: function(xhr,error){
                 console.log(xhr.responseText);
