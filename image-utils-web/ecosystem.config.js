@@ -24,7 +24,7 @@ module.exports = {
    */
   deploy : {
     production : {
-      user : 'joe',
+      user : 'root',
       host : '182.254.242.31',
       ref  : 'origin/master',
       repo : 'https://github.com/choelea/image-utils-web.git',
