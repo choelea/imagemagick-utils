@@ -29,7 +29,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'https://github.com/choelea/nodejs-webs.git',
       path : '/home/joe/nodejsapp/images-utils-web',
-      'post-deploy' : 'cd images-utils-web && npm install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'cd image-utils-web && npm install && pm2 reload ecosystem.config.js --env production'
     },
     dev : {
       user : 'osboxes',
