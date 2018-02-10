@@ -27,7 +27,7 @@ module.exports = {
       user : 'root',
       host : '182.254.242.31',
       ref  : 'origin/master',
-      repo : 'https://github.com/choelea/image-utils-web.git',
+      repo : 'https://github.com/choelea/nodejs-webs.git',
       path : '/home/joe/nodejsapp/images-utils-web',
       'post-deploy' : 'cd images-utils-web && npm install && pm2 reload ecosystem.config.js --env production'
     },
