@@ -7,6 +7,7 @@ let bodyParser   = require('body-parser');
 let loki         = require('lokijs');
 let routes       = require('./routes');
 var hbs          = require('hbs');
+const cors       = require('cors')
 
 //setup
 let database = new loki('database.loki', { autoload: true, autosave: true });
@@ -20,11 +21,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', '.hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 //middleware
-app.use(bodyParser.json());
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
+app.use(bodyParser.json());
+app.use(cookieParser());
 //loki db reference for the router
 app.use((req, res, next) => { req.database = database; next(); });
 

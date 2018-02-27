@@ -70,4 +70,17 @@ router.post('/upload', upload.array('images'), (req, res, next) => {
     }
     res.json({ uuid, count: req.files.length });
 })
+
+router.post('/uploadone', upload.single('image'), (req, res, next) => {
+    let uuid = uuidv1();
+    let targetFolder = 'uploads/' + uuid;
+    const file = req.file
+    fs.mkdir(targetFolder, (error) => { if (error) throw error });
+    const targetPath = targetFolder + "/" + file.originalname;
+    im.convert([file.path, '-quality', 80, targetPath], function (err, stdout) {
+        if (err) throw err;
+    })
+    const url = req.do
+    res.json({ url: 'http://localhost:3000/' + targetPath });
+})
 module.exports = router;
