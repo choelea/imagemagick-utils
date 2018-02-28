@@ -14,7 +14,7 @@ let database = new loki('database.loki', { autoload: true, autosave: true });
 let app      = express();
 
 //settings
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 4000);
 app.set('views', path.join(__dirname, 'views'));
 
 //view engine & main template
