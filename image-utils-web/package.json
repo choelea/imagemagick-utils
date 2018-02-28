@@ -17,7 +17,6 @@
     "express": "^4.12.4",
     "handlebars": "^4.0.5",
     "hbs": "^4.0.1",
-    "sharp": "0.17.2",
     "imagemin": "^5.3.1",
     "imagemin-jpegtran": "^5.0.2",
     "imagemin-mozjpeg": "^7.0.0",

@@ -7,11 +7,11 @@ const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 var zipFolder = require('zip-folder');
-var upload = multer({ dest: 'uploads/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
+var upload = multer({ dest: (process.env.uploadPath || 'uploads')+'/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
 const compressImages = async (req, res, next) => {
     try {
         const uuid = uuidv1();
-        let targetFolder = 'uploads/' + uuid + '/';
+        let targetFolder = process.env.uploadPath + uuid + '/';
         fs.mkdir(targetFolder, (error) => { if (error) throw error });
         const arrFiles = []
         for (let i = 0; i < req.files.length; i++) {
@@ -35,7 +35,7 @@ const compressImages = async (req, res, next) => {
 }
 const compressImage = async (req, res, next) => {
     try {
-        let targetFolder = 'uploads/' + uuidv1();
+        let targetFolder = process.env.uploadPath + uuidv1();
         const file = req.file;
         fs.mkdir(targetFolder, (error) => { if (error) throw error });
         const destPath = targetFolder + file.originalname;
@@ -64,9 +64,9 @@ router.get('/', (req, res) => {
 router.get('/zip/:uuid', (req, res) => {
     var images = [];
     const uuid = req.params.uuid;
-    const dir = 'uploads/' + uuid;
+    const dir = process.env.uploadPath + uuid;
     var returnJson = {};
-    zipFolder(dir, 'uploads/' + uuid + ".zip", function (err) {
+    zipFolder(dir, process.env.uploadPath + uuid + ".zip", function (err) {
         if (err) {
             throw err
         }
@@ -106,7 +106,7 @@ router.post('/upload', upload.array('images'), compressImages)
 
 router.post('/uploadone', upload.single('image'), (req, res, next) => {
     let uuid = uuidv1();
-    let targetFolder = 'uploads/' + uuid;
+    let targetFolder = process.env.uploadPath + uuid;
     const file = req.file
     fs.mkdir(targetFolder, (error) => { if (error) throw error });
     const targetPath = targetFolder + "/" + file.originalname;

@@ -14,7 +14,8 @@ module.exports = {
       // },
       env_production : {
         NODE_ENV: 'production',
-        PORT: 4011
+        PORT: 4011,
+        uploadPath: '/home/joe/upload/'
       }
     }
   ],
