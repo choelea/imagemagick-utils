@@ -119,5 +119,5 @@ router.get('/words', async (req, res) => {
 /** upload images: 1, upload to uploads/tmp */
 router.post('/upload', upload.array('images'), compressImages)
 
-router.post('/uploadone', compressImage)
+router.post('/uploadone', upload.single('image'), compressImage)
 module.exports = router;
