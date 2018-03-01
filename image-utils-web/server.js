@@ -16,7 +16,7 @@ let app      = express();
 //settings
 app.set('port', process.env.PORT || 4000);
 app.set('views', path.join(__dirname, 'views'));
-
+app.enable('trust proxy')
 //view engine & main template
 app.set('view engine', '.hbs');
 hbs.registerPartials(__dirname + '/views/partials');

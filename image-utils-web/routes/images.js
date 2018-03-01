@@ -62,7 +62,7 @@ const compressImage = async (req, res, next) => {
                 // imageminJpegtran()
             ]
         });
-        res.json({ url: 'http://localhost:4000/' + destPath });
+        res.json({ url: `http://${req.hostname}/${destPath}` });
     } catch (err) {
         console.error(err)
         res.status(500).json({ msg: 'Error Happened!' })
@@ -119,16 +119,5 @@ router.get('/words', async (req, res) => {
 /** upload images: 1, upload to uploads/tmp */
 router.post('/upload', upload.array('images'), compressImages)
 
-router.post('/uploadone', upload.single('image'), (req, res, next) => {
-    let uuid = uuidv1();
-    let targetFolder = 'uploads/' + uuid;
-    const file = req.file
-    fs.mkdir(targetFolder, (error) => { if (error) throw error });
-    const targetPath = targetFolder + "/" + file.originalname;
-    // im.convert([file.path, '-quality', 80, targetPath], function (err, stdout) {
-    //     if (err) throw err;
-    // })
-    const url = req.do
-    res.json({ url: 'http://localhost:4000/' + targetPath });
-})
+router.post('/uploadone', compressImage)
 module.exports = router;
