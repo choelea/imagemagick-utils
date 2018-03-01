@@ -7,19 +7,20 @@ const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 var zipFolder = require('zip-folder');
-var upload = multer({ dest: (process.env.uploadPath || 'uploads')+'/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
+var upload = multer({ dest: 'uploads/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
 const compressImages = async (req, res, next) => {
     try {
         const uuid = uuidv1();
-        let targetFolder = process.env.uploadPath + uuid + '/';
+        let targetFolder = 'uploads/' + uuid + '/';
         fs.mkdir(targetFolder, (error) => { if (error) throw error });
         const arrFiles = []
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
             const destPath = targetFolder + file.originalname
-            await fs.copyFileSync(file.path, destPath)
+            fs.renameSync(file.path, destPath)
+            // await fs.copyFileSync(file.path, destPath)
             arrFiles.push(destPath)
-            await fs.unlinkSync(file.path)
+            // await fs.unlinkSync(file.path) 
         }
         await imagemin(arrFiles, targetFolder, {
             use: [
@@ -35,7 +36,7 @@ const compressImages = async (req, res, next) => {
 }
 const compressImage = async (req, res, next) => {
     try {
-        let targetFolder = process.env.uploadPath + uuidv1();
+        let targetFolder = 'uploads/' + uuidv1();
         const file = req.file;
         fs.mkdir(targetFolder, (error) => { if (error) throw error });
         const destPath = targetFolder + file.originalname;
@@ -64,9 +65,9 @@ router.get('/', (req, res) => {
 router.get('/zip/:uuid', (req, res) => {
     var images = [];
     const uuid = req.params.uuid;
-    const dir = process.env.uploadPath + uuid;
+    const dir = 'uploads/' + uuid;
     var returnJson = {};
-    zipFolder(dir, process.env.uploadPath + uuid + ".zip", function (err) {
+    zipFolder(dir, 'uploads/' + uuid + ".zip", function (err) {
         if (err) {
             throw err
         }
@@ -81,8 +82,8 @@ router.get('/:uuid/:count', (req, res) => {
     const dir = 'uploads/' + uuid;
     fs.readdir(dir, (err, files) => {
         if (err) {
-            console.log(err);
-            throw error;
+            console.log(err); 
+            throw err;
         }
         files.forEach(file => {
             images.push('/uploads/' + uuid + '/' + file);
@@ -106,7 +107,7 @@ router.post('/upload', upload.array('images'), compressImages)
 
 router.post('/uploadone', upload.single('image'), (req, res, next) => {
     let uuid = uuidv1();
-    let targetFolder = process.env.uploadPath + uuid;
+    let targetFolder = 'uploads/' + uuid;
     const file = req.file
     fs.mkdir(targetFolder, (error) => { if (error) throw error });
     const targetPath = targetFolder + "/" + file.originalname;
