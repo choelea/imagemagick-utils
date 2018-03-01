@@ -14,8 +14,11 @@ module.exports = {
       // },
       env_production : {
         NODE_ENV: 'production',
-        PORT: 4011,
-        uploadPath: '/home/joe/upload/'
+        PORT: 4011
+      },
+      env_int : {
+        NODE_ENV: 'int',
+        PORT: 4011
       }
     }
   ],
@@ -32,6 +35,14 @@ module.exports = {
       repo : 'https://github.com/choelea/nodejs-webs.git',
       path : '/home/joe/nodejsapp/images-utils-web',
       'post-deploy' : 'cd image-utils-web && npm install && pm2 reload ecosystem.config.js --env production'
+    },
+    int : {
+      user : 'okchem',
+      host : '192.168.1.97',
+      ref  : 'origin/master',
+      repo : 'https://github.com/choelea/nodejs-webs.git',
+      path : '/home/okchem/nodejsapp/images-utils-web',
+      'post-deploy' : 'cd image-utils-web && npm install && pm2 reload ecosystem.config.js --env int'
     },
     dev : {
       user : 'osboxes',
