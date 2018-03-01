@@ -5,9 +5,19 @@ const fs = require('fs');
 const imagemin = require('imagemin');
 const imageminJpegtran = require('imagemin-jpegtran');
 const imageminPngquant = require('imagemin-pngquant');
-const imageminMozjpeg = require('imagemin-mozjpeg');
-var zipFolder = require('zip-folder');
-var upload = multer({ dest: 'uploads/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
+const imageminJpegRecompress = require('imagemin-jpeg-recompress');
+// const imageminMozjpeg = require('imagemin-mozjpeg');
+const zipFolder = require('zip-folder');
+const upload = multer({ dest: 'uploads/tmp', limits: { fields: 10, fileSize: '20MB', files: 20 } })
+const compressOption = {
+    accurate: true,//高精度模式
+    quality: "high",//图像质量:low, medium, high and veryhigh;
+    method: "smallfry",//网格优化:mpe, ssim, ms-ssim and smallfry;
+    min: 70,//最低质量
+    loops: 0,//循环尝试次数, 默认为6;
+    progressive: false,//基线优化
+    subsample: "default"//子采样:default, disable;
+}
 const compressImages = async (req, res, next) => {
     try {
         const uuid = uuidv1();
@@ -16,7 +26,7 @@ const compressImages = async (req, res, next) => {
         const arrFiles = []
         for (let i = 0; i < req.files.length; i++) {
             const file = req.files[i];
-            const destPath = targetFolder + file.originalname
+            const destPath = 'uploads/tmp/' + file.originalname
             fs.renameSync(file.path, destPath)
             // await fs.copyFileSync(file.path, destPath)
             arrFiles.push(destPath)
@@ -24,7 +34,9 @@ const compressImages = async (req, res, next) => {
         }
         await imagemin(arrFiles, targetFolder, {
             use: [
-                imageminMozjpeg({ quality: 80 })
+                // imageminJpegRecompress({ quality: 80 })
+                imageminJpegRecompress(compressOption)
+                // imageminJpegtran()
             ]
         });
         console.log('Images optimized');
@@ -45,7 +57,9 @@ const compressImage = async (req, res, next) => {
         fs.unlinkSync(file.path);
         await imagemin(arrFiles, targetFolder, {
             use: [
-                imageminMozjpeg({ quality: 80 })
+                // imageminJpegRecompress({ quality: 80 })
+                imageminJpegRecompress(compressOption)                
+                // imageminJpegtran()
             ]
         });
         res.json({ url: 'http://localhost:4000/' + destPath });
@@ -82,7 +96,7 @@ router.get('/:uuid/:count', (req, res) => {
     const dir = 'uploads/' + uuid;
     fs.readdir(dir, (err, files) => {
         if (err) {
-            console.log(err); 
+            console.log(err);
             throw err;
         }
         files.forEach(file => {
